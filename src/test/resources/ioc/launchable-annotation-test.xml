@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+	default-init-method="init" default-destroy-method="destroy">
+
+
+	<!-- Environment-specific properties -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:springppc-options.properties" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="order" value="1000" />
+	</bean>
+
+	<!-- A PPC with no properties whose ordering is set higher (to cause it to be the last PPC to run). If the resolution of 
+		a property reaches this PPC, it indicates that the property placeholder was not resolved. By virtue of the ignoreUnresolvablePlaceholders=false, 
+		this generates an error. Additional PPCs can be defined in other modules, as long as their order is set to a lower number 
+		(higher priority) than this one. -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+		<property name="order" value="2000" />
+	</bean>
+
+	<context:annotation-config />
+
+ 	<bean class="org.neovera.jdiablo.environment.MapBasedPropertyPlaceholderProvider">
+		<property name="properties">
+			<map>
+				<entry key="LevelOneLaunchable.option1c" value="${LevelOneLaunchable.option1c}" />
+			</map>
+		</property>
+	</bean>
+	
+</beans>

@@ -1,0 +1,51 @@
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Logs #
+######################
+*.log
+*.log.*
+
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Editor Crumbs #
+################
+*~
+*.swp
+
+# Maven output directories #
+############################
+/target
+*/target
+
+# IntelliJ specific files/directories #
+#######################################
+out
+.idea
+*.ipr
+*.iws
+*.iml
+atlassian-ide-plugin.xml
+
+# Eclipse specific files/directories #
+######################################
+.classpath
+.project
+*.metadata
+*.externalToolBuilders
+*.prefs
+
+# NetBeans specific files/directories #
+#######################################
+.nbattrs
