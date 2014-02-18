@@ -21,7 +21,6 @@ import java.util.Properties;
 
 import org.neovera.jdiablo.annotation.Option;
 import org.neovera.jdiablo.annotation.RawOptions;
-import org.neovera.jdiablo.annotation.State;
 import org.neovera.jdiablo.annotation.UseEnvironment;
 import org.neovera.jdiablo.annotation.UseOptionValueProviders;
 import org.neovera.jdiablo.environment.ClasspathOptions;

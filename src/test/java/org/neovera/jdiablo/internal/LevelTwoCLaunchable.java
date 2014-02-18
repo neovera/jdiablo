@@ -20,8 +20,6 @@ import java.util.Properties;
 
 import org.neovera.jdiablo.ExecutionState;
 import org.neovera.jdiablo.annotation.Option;
-import org.neovera.jdiablo.annotation.SkipEnvironment;
-import org.neovera.jdiablo.environment.Help;
 
 public class LevelTwoCLaunchable extends LevelOneLaunchable {
     
