@@ -314,8 +314,7 @@ public class BuilderImpl implements TargetBuilder, EnvironmentBuilder, Executor,
             }
             CommandLine cmd = parser.parse(_cliOptions, getArgs());
 
-            // Bind option values to the launch target and new environments only.
-            bind(_launchableClass, _launchable, cmd, _launchProperties);
+            // Bind option values to new environments only.
             for (Class<? extends Environment> clz : _environments.keySet()) {
                 if (_environments.get(clz).isNew()) {
                     bind(clz, _environments.get(clz).getEnvironment(), cmd, _environments.get(clz).getOptionProperties());
@@ -353,6 +352,11 @@ public class BuilderImpl implements TargetBuilder, EnvironmentBuilder, Executor,
                 } else {
                     break;
                 }
+            }
+            
+            // Bind option values to the launch target last, to give these settings highest precedence.
+            if (!abort) {
+                bind(_launchableClass, _launchable, cmd, _launchProperties);
             }
 
             // Start launchable if not aborting.
