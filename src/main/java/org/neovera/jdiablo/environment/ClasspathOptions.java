@@ -28,6 +28,8 @@ import org.neovera.jdiablo.Environment;
 import org.neovera.jdiablo.Launchable;
 import org.neovera.jdiablo.OptionPropertyAccessor;
 import org.neovera.jdiablo.OptionValueProvider;
+import org.neovera.jdiablo.internal.TargetOptionBinder;
+import org.neovera.jdiablo.internal.convert.StringLiteralOptionValueFacets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +71,8 @@ public class ClasspathOptions implements OptionValueProvider {
                 String optionValue = getOptionValue(optionProperty, optionsBySuperclasses);
                 if (optionValue != null) {
                     try {
-                        optionProperty.getSetterMethod().invoke(target, optionValue);
+                        TargetOptionBinder optionBinder = new TargetOptionBinder(optionProperty);
+                        optionBinder.bind(new StringLiteralOptionValueFacets(optionValue), target);
                     } catch (Exception e) {
                         String msg = "While initializing target with class options loaded from classpath";
                         _logger.error(msg, e);

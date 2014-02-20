@@ -213,7 +213,7 @@ public class LaunchableAnnotationsTest {
         Assert.assertEquals(launchable.getStringOption(),"stringFromCPProps");
         Assert.assertEquals(launchable.getBigDecimalOption(),new BigDecimal("11.11111"));
         Assert.assertEquals(launchable.getIntegerOption(),new Integer(11));
-        Assert.assertEquals(launchable.getLongOption(),new Long(11));
+        Assert.assertEquals(launchable.getLongOption(),new Long(111));
         Assert.assertEquals(launchable.getBooleanOption(),Boolean.TRUE);
         Assert.assertEquals(Arrays.asList(launchable.getStringArrayOption()),Arrays.asList("string1FromCPProps","string2FromCPProps","string3FromCPProps"));
     }
@@ -221,7 +221,7 @@ public class LaunchableAnnotationsTest {
     /**
      * Test the @UseOptionValueProviders ClasspathOptions : using longOption key instead of property name
      */
-    public void testUseOptionValueProvidersClasspathOptionsLongOptionKeys() {
+    public void testUseOptionValueProvidersClasspathOptions() {
         Executor executor = new BuilderFactory().create().withTarget(LevelTwoDLaunchable.class).build();
         BuilderImpl executorImpl = (BuilderImpl)executor;
         LevelTwoDLaunchable launchable = (LevelTwoDLaunchable)(executorImpl.getLaunchable());

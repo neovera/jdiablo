@@ -16,15 +16,12 @@
 package org.neovera.jdiablo.internal;
 
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.neovera.jdiablo.annotation.Option;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.neovera.jdiablo.internal.convert.CommandLineOptionValueFacets;
 
 /**
  * Encapsulates a property and the corresponding option.
@@ -32,11 +29,13 @@ import org.slf4j.LoggerFactory;
 public class OptionAnnotatedProperty {
 
     private org.apache.commons.cli.Option _cliOption;
-    private static Logger _logger = LoggerFactory.getLogger(OptionAnnotatedProperty.class);
     private OptionPropertySpi _optionProperty;
+    
+    private TargetOptionBinder _optionBinder;
 
     public OptionAnnotatedProperty(OptionPropertySpi optionProperty) {
         setOptionProperty(optionProperty);
+        _optionBinder = new TargetOptionBinder(optionProperty);
     }
 
     public Option getOption() {
@@ -98,55 +97,12 @@ public class OptionAnnotatedProperty {
      * @param target Object to apply to.
      */
     public void bind(CommandLine cmd, Object target) {
-        Option option = getOption();
-        try {
-            if (!cmd.hasOption(option.shortOption())) {
-                return;
-            }
-            if (!getSetterMethod().getDeclaringClass().isAssignableFrom(target.getClass())) {
-                return;
-            }
-
-            if (_logger.isTraceEnabled()) {
-                _logger.trace(getSetterMethod().getParameterTypes()[0].getName());
-                _logger.trace(option.shortOption());
-                _logger.trace(target.getClass().getName());
-            }
-            String value = cmd.getOptionValue(option.shortOption());
-            getOptionProperty().setValueInCommandLine(true);
-            if (getSetterMethod().getParameterTypes()[0].equals(Boolean.class) || "boolean".equals(getSetterMethod().getParameterTypes()[0].getName())) {
-                if (option.args() == 0) {
-                    getSetterMethod().invoke(target, true);
-                } else {
-                    getSetterMethod().invoke(target, value == null ? false : "true".equals(value));
-                }
-            } else if (getSetterMethod().getParameterTypes()[0].equals(Integer.class) || "int".equals(getSetterMethod().getParameterTypes()[0].getName())) {
-                if (option.args() == 0) {
-                    getSetterMethod().invoke(target, 1);
-                } else {
-                    getSetterMethod().invoke(target, value == null ? 0 : Integer.parseInt(value));
-                }
-            } else if (getSetterMethod().getParameterTypes()[0].equals(Long.class) || "long".equals(getSetterMethod().getParameterTypes()[0].getName())) {
-                if (option.args() == 0) {
-                    getSetterMethod().invoke(target, 1);
-                } else {
-                    getSetterMethod().invoke(target, value == null ? 0 : Long.parseLong(value));
-                }
-            } else if (getSetterMethod().getParameterTypes()[0].equals(BigDecimal.class)) {
-                getSetterMethod().invoke(target, value == null ? null : new BigDecimal(value));
-            } else if (getSetterMethod().getParameterTypes()[0].equals(String.class)) {
-                getSetterMethod().invoke(target, value);
-            } else if (getSetterMethod().getParameterTypes()[0].isArray() && getSetterMethod().getParameterTypes()[0].getName().contains(String.class.getName())) {
-                getSetterMethod().invoke(target, (Object)cmd.getOptionValues(option.shortOption()));
-            } else if (getSetterMethod().getParameterTypes()[0].equals(Properties.class)) {
-                getSetterMethod().invoke(target, cmd.getOptionProperties(option.shortOption()));
-            } else {
-                getOptionProperty().setValueInCommandLine(false);
-                throw new RuntimeException("Could not resolve parameter type for " + getSetterMethod().toString());
-            }
-        } catch (Exception e) {
-            _logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+        if (!cmd.hasOption(getOption().shortOption())) {
+            return;
         }
+
+        boolean isBinded = _optionBinder.bind(new CommandLineOptionValueFacets(cmd, getOption()), target);
+        getOptionProperty().setValueInCommandLine(isBinded);
     }
+    
 }
