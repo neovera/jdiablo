@@ -27,7 +27,7 @@ public class StringLiteralOptionValueFacets implements OptionValueFacets {
     String _value;
     
     /**
-     * @param commandLine
+     * @param value The raw string value provided the based for the various option value facets 
      */
     public StringLiteralOptionValueFacets(String value) {
         super();
