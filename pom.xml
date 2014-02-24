@@ -33,7 +33,7 @@
 	
 	<scm>
 		<url>git@github.com:neovera/jdiablo.git</url>
-		<developerConnection>scm:git:https://github.com/neovera/jdiablo.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:neovera/jdiablo.git</developerConnection>
 		<connection>scm:git:git@github.com:neovera/jdiablo.git</connection>
 	</scm>
   	
